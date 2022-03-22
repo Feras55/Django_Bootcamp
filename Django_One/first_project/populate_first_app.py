@@ -7,7 +7,7 @@ django.setup()
 
 # FAKE POP SCRIPT
 import random
-from first_app.models import AccessRecord, Webpage, Topic
+from first_app.models import AccessRecord, Webpage, Topic,User
 from faker import Faker
 
 fakegen = Faker()
@@ -22,6 +22,14 @@ def add_topic():
 
 def populate(n=5):
     for entry in range(n):
+        fake_first_name = fakegen.first_name()
+        fake_last_name = fakegen.last_name()
+        fake_email = fakegen.email()
+
+        # Create user with the generated attributes
+
+        user = User.objects.get_or_create(first_name=fake_first_name, last_name=fake_last_name, email=fake_email)[0]
+        user.save()
         # get the topic for entry
         top = add_topic()
 
@@ -35,6 +43,8 @@ def populate(n=5):
 
         # create access record for that page
         acc_rec = AccessRecord.objects.get_or_create(name=webpg, date=fake_date)[0]
+
+
 
 
 if __name__ == '__main__':
